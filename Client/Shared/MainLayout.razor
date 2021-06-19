@@ -1,0 +1,79 @@
+﻿@inherits LayoutComponentBase
+@using Microsoft.AspNetCore.SignalR.Client;
+
+<MudThemeProvider />
+<MudDialogProvider />
+<MudSnackbarProvider />
+
+<div class="page">
+    <div class="sidebar">
+        <NavMenu />
+    </div>
+
+    <div class="main">
+        <div class="top-row px-4 auth">
+            <LoginDisplay />
+            <a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
+        </div>
+
+        <div class="content px-4">
+            @* передаю hubConnection каждому дочернему элементу страницы Layout. Здесь же и наш чат(Chat.razor) *@
+            <CascadingValue Value="hubConnection">
+                @Body
+            </CascadingValue>
+        </div>
+    </div>
+</div>
+
+
+
+@* Идея кода ниже в том, что в где бы юзер не был в приложении - он увидит всплывающее уведомление
+    с помощью _snackBar, так как сработает он на главном компоненте. Поехали! *@
+@code {
+    private string CurrentUserId { get; set; }
+
+    // ниже _navigationManager, _snackBar, _stateProvider - внедрил(@inject) в Imports.razor
+
+
+    private HubConnection hubConnection;
+    public bool IsConnected => hubConnection.State == HubConnectionState.Connected;
+
+    protected override async Task OnInitializedAsync()
+    {
+        hubConnection = new HubConnectionBuilder()
+            .WithUrl(_navigationManager
+            .ToAbsoluteUri("/signalRHub"))
+            .Build();
+
+        await hubConnection.StartAsync();
+
+        hubConnection.On<string, string, string>("ReceiveChatNotification", (message, receiverUserId, senderUserId) =>
+        {
+            // если текущий юзер - получатель, то далее наш многострадальный _snackBar
+            if (CurrentUserId == receiverUserId)
+            {
+                // код ниже найден в (не)официальной докумментации и немного подпилен
+                _snackBar.Add(message, Severity.Info, config =>
+                {
+                    config.VisibleStateDuration = 10000;
+                    config.HideTransitionDuration = 500;
+                    config.ShowTransitionDuration = 500;
+                    config.Action = "Chat?";
+                    config.ActionColor = Color.Success;
+                    config.Onclick = _snackbar => // при клике переходим в чат к отправителю! Круто, да!? Стоило нескольких часов мучений
+                    {
+                        _navigationManager.NavigateTo($"chat/{senderUserId}");
+                        return Task.CompletedTask;
+                    };
+                });
+            }
+        });
+
+
+        var state = await _stateProvider.GetAuthenticationStateAsync();
+        var user = state.User;
+
+        // от этотниже "sub"... я ничего не понял как оно работает, но документация Microsoft мне предложила так. Таки работает
+        CurrentUserId = user.Claims.Where(a => a.Type == "sub").Select(a => a.Value).FirstOrDefault();
+    }
+}

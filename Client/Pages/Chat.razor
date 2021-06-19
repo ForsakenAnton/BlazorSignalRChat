@@ -1,0 +1,85 @@
+﻿@page "/chat/{ContactId}"
+@page "/chat"
+
+<link href="/css/chat-styles.css" rel="stylesheet" />
+
+<div class="flex-container">
+    <div id="chatContainer" class="flex-item-left" style="overflow:scroll;" @onscroll="OnScroll" @onscroll:stopPropagation > 
+        @if (String.IsNullOrEmpty(ContactId))
+        {
+            <p class="caption"><b>Chat</b></p>
+        }
+        else
+        {
+            <p class="caption"><b>@ContactEmail</b></p>
+        }
+
+        @foreach (var message in messages)
+        {
+            string deepskyblue = "lightblue";
+            if (ContactId == @message.FromUser.Id)
+            {
+                deepskyblue = "deepskyblue";
+            }
+
+
+            <div style="background-color: lightgray; border-radius:10px; padding-left:2em;">
+                <div class="mail">
+                    <span class="avatar" style="background-color:@deepskyblue">@message.FromUser.Email.FirstOrDefault()</span>
+                    &nbsp;&nbsp; @message.FromUser.Email.ToUpper()
+                </div>
+                <div><small class="created-date">@message.CreatedDate</small></div>
+            </div>
+            <div class="message" style="background-color:@deepskyblue">
+                @message.Message
+            </div>
+
+            @*<div class="mail">
+                <span class="avatar" style="background-color:@deepskyblue">@message.FromUser.Email.FirstOrDefault()</span>
+                &nbsp;&nbsp; @message.FromUser.Email.ToUpper() &nbsp;&nbsp;|&nbsp;&nbsp; <small>@message.CreatedDate</small>
+            </div>
+            <div class="message" style="background-color:@deepskyblue">
+                @message.Message
+            </div>*@
+
+            deepskyblue = "lightblue";
+            //style = '@(ContactId==@message.FromUser.Id?"background-color:deepskyblue;" : "lightblue")'
+        }
+
+        @*<textarea class="text-area" @bind="CurrentMessage" placeholder="Enter your message..." rows="4" />
+        <button class="send-button" @onclick="SubmitAsync">Send >></button>*@
+        @if (!String.IsNullOrEmpty(ContactId))
+        {
+            <div id="textAreaContainer" class="sticky">
+                <textarea id="chat-text-area" class="text-area" @bind="CurrentMessage" placeholder="Enter your message..." rows="4" />
+                <button class="send-button" @onclick="SubmitAsync">Send&raquo;&raquo;</button>
+            </div>
+        }
+
+    </div>
+
+    <div class="flex-item-right">
+        <p class="caption"><b>#Contacts</b></p>
+
+        @foreach (var user in ChatUsers)
+        {
+            @if (user.Id == ContactId)
+            {
+                <div class="mail" style="background-color:aqua" @onclick="() => LoadUserChat(user.Id)">
+                    <div class="ellipsis">
+                        <span class="avatar" style="background-color:deepskyblue">@user.Email.ToUpper().FirstOrDefault()</span>
+                        &nbsp;&nbsp;@user.Email.ToUpper()
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="mail" @onclick="() => LoadUserChat(user.Id)">
+                    <div class="ellipsis">
+                        <span class="avatar">@user.Email.ToUpper().FirstOrDefault()</span>&nbsp;&nbsp;@user.Email
+                    </div>
+                </div>
+            }
+        }
+    </div>
+</div>

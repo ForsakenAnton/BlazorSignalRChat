@@ -1,0 +1,16 @@
+﻿#contacts {
+    float: right;
+    width: 40%;
+    padding: 0 20px 0 10px;
+    height: 100vh;
+    background-color: orange;
+}
+
+#chat {
+    background-color: #fafafa;
+    border-left: 1px solid #ccc;
+    border-right: 1px solid #ccc;
+    padding: 15px;
+    width: 60%;
+    height: 100vh;
+}

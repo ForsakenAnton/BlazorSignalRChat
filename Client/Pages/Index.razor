@@ -1,0 +1,117 @@
+﻿@page "/"
+
+
+<div class="container-fluid">
+    <h1 class="text-center display-2 bg-light rounded">BlazorSignalRChat</h1>
+    <h3 class="bg-info rounded"><span class="badge badge-warning mb-1 ml-5">!</span> Ниже ссылки на документацию, которую использовал:</h3>
+
+    <div class="list-group rounded">
+        <a class="list-group-item list-group-item-action list-group-item-light d-flex align-items-center" target="_blank" href="https://docs.microsoft.com/ru-ru/aspnet/core/blazor/?view=aspnetcore-5.0">
+            <span class="badge badge-info rounded-pill p-1 pr-3 pl-3 mr-2">1</span> Введение в ASP.NET Core Blazor
+        </a>
+
+        <a class="list-group-item list-group-item-action list-group-item-light d-flex align-items-center" target="_blank" href="https://docs.microsoft.com/ru-ru/aspnet/core/tutorials/signalr-blazor?view=aspnetcore-5.0&tabs=visual-studio&pivots=server">
+            <span class="badge badge-info rounded-pill p-1 pr-3 pl-3 mr-2">2</span>Использование SignalR для ASP.NET Core с Blazor
+        </a>
+
+        <a class="list-group-item list-group-item-action list-group-item-light d-flex align-items-center" target="_blank" href="https://docs.microsoft.com/ru-ru/aspnet/core/blazor/fundamentals/routing?view=aspnetcore-5.0#navlink-and-navmenu-components">
+            <span class="badge badge-info rounded-pill p-1 pr-3 pl-3 mr-2">3</span>Маршрутизация ASP.NET Core Blazor
+        </a>
+
+        <a class="list-group-item list-group-item-action list-group-item-light d-flex align-items-center" target="_blank" href="https://docs.microsoft.com/ru-ru/aspnet/core/blazor/components/lifecycle?view=aspnetcore-5.0#blazor-server-reconnection-events">
+            <span class="badge badge-info rounded-pill p-1 pr-3 pl-3 mr-2">4</span>Жизненный цикл компонента Razor ASP.NET Core
+        </a>
+
+        <a class="list-group-item list-group-item-action list-group-item-light d-flex align-items-center" target="_blank" href="https://docs.microsoft.com/ru-ru/aspnet/core/blazor/blazor-server-ef-core?view=aspnetcore-5.0">
+            <span class="badge badge-info rounded-pill p-1 pr-3 pl-3 mr-2">5</span>ASP.NET Core Blazor Server и Entity Framework Core (EF Core)
+        </a>
+
+        <a class="list-group-item list-group-item-action list-group-item-light d-flex align-items-center" target="_blank" href="https://docs.microsoft.com/ru-ru/aspnet/core/mvc/views/razor?view=aspnetcore-5.0">
+            <span class="badge badge-info rounded-pill p-1 pr-3 pl-3 mr-2">6</span>Справочник по синтаксису Razor для ASP.NET Core
+        </a>
+
+        <a class="list-group-item list-group-item-action list-group-item-light d-flex align-items-center" target="_blank" href="https://docs.microsoft.com/ru-ru/aspnet/core/blazor/fundamentals/signalr?pivots=server&view=aspnetcore-5.0#blazor-server-circuit-handler">
+            <span class="badge badge-info rounded-pill p-1 pr-3 pl-3 mr-2">7</span>Руководство по ASP.NET Core Blazor SignalR
+        </a>
+
+        <a class="list-group-item list-group-item-action list-group-item-light d-flex align-items-center" target="_blank" href="https://docs.microsoft.com/ru-ru/aspnet/core/tutorials/signalr-blazor?view=aspnetcore-5.0&tabs=visual-studio&pivots=server">
+            <span class="badge badge-info rounded-pill p-1 pr-3 pl-3 mr-2">8</span>Использование SignalR для ASP.NET Core с Blazor
+        </a>
+
+        <a class="list-group-item list-group-item-action list-group-item-light d-flex align-items-center" target="_blank" href="https://docs.microsoft.com/ru-ru/aspnet/core/blazor/javascript-interoperability/call-javascript-from-dotnet?view=aspnetcore-5.0">
+            <span class="badge badge-info rounded-pill p-1 pr-3 pl-3 mr-2">9</span>Вызов функций JavaScript из методов .NET в ASP.NET Core Blazor
+        </a>
+        <a class="list-group-item list-group-item-action list-group-item-light d-flex align-items-center" target="_blank" href="https://docs.microsoft.com/ru-ru/aspnet/core/blazor/javascript-interoperability/call-dotnet-from-javascript?view=aspnetcore-5.0">
+            <span class="badge badge-info rounded-pill p-1 pr-3 pl-3 mr-2">10</span>Вызов методов .NET из функций JavaScript в ASP.NET Core Blazor
+        </a>
+    </div>
+</div>
+
+@*<h1>Hello, world!</h1>
+
+Welcome to your new app.
+
+<SurveyPrompt Title="How is Blazor working for you?" />*@
+
+@*@inject ISnackbar Snackbar
+
+<MudButton Variant="Variant.Filled" Color="Color.Primary" @onclick="@(() => Snackbar.Add("Simple Snackbar"))">
+    Open Snackbar
+</MudButton>*@
+
+
+@*<button @onclick="@(()=>snackbar.Show())">Snackbar</button>*@
+@*<button @onclick="Click">Click</button>*@
+@*<MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="@Click">
+        Open Clickable Snackbar
+    </MudButton>
+
+
+        @code {
+
+
+            public void Click()
+            {
+                _snackBar.Add("qwerty Message", Severity.Info, config =>
+                {
+                    config.VisibleStateDuration = 10000;
+                    config.HideTransitionDuration = 500;
+                    config.ShowTransitionDuration = 500;
+                    config.Action = "Chat?";
+                    config.ActionColor = Color.Info;
+                    config.Onclick = snackbar => // при клике переходим в чат к отправителю! Круто, да!? Стоило нескольких часов мучений
+                    {
+                        _navigationManager.NavigateTo($"chat/1");
+                        return Task.CompletedTask;
+                    };
+                });
+            }
+        }*@
+
+@*<MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="@Show">
+        Open Clickable Snackbar
+    </MudButton>
+
+    <MudButton @onclick="@(() => _snackBar.Add("My Close button is gone!", Severity.Normal, config => { config.ShowCloseIcon = false; }))" Variant="Variant.Filled" Color="Color.Primary">
+        Open Modified Snackbar
+    </MudButton>
+
+    @code {
+
+        void Show()
+        {
+            _snackBar.Add("I got a message for you", Severity.Normal, config =>
+            {
+                config.Onclick = snackbar =>
+                {
+                    SayHello();
+                    return Task.CompletedTask;
+                };
+            });
+        }
+
+        public void SayHello()
+        {
+            _snackBar.Add("Hello World!");
+        }
+    }*@
